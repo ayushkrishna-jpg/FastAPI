@@ -1,0 +1,140 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.8, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\1549\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: D:\FastAPI training\youtube\TodoApp
+configfile: pyproject.toml
+plugins: anyio-4.11.0, ddtrace-3.18.1, asyncio-1.3.0, mock-3.15.1, xdist-3.8.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 18 items
+
+test/test_admin.py::test_admin_read_all_authenticated PASSED             [  5%]
+test/test_auth.py::test_authenticate_user PASSED                         [ 11%]
+test/test_auth.py::test_create_access_token PASSED                       [ 16%]
+test/test_auth.py::test_get_current_user_valid_token PASSED              [ 22%]
+test/test_auth.py::test_get_current_user_missing_payload PASSED          [ 27%]
+test/test_main.py::test_return_health_check PASSED                       [ 33%]
+test/test_todos.py::test_read_all_authenticated PASSED                   [ 38%]
+test/test_todos.py::test_read_one_authenticated PASSED                   [ 44%]
+test/test_todos.py::test_read_one_authenticated_not_found FAILED         [ 50%]
+test/test_todos.py::test_create_todo PASSED                              [ 55%]
+test/test_todos.py::test_update_todo PASSED                              [ 61%]
+test/test_todos.py::test_update_todo_not_found FAILED                    [ 66%]
+test/test_todos.py::test_delete_todo PASSED                              [ 72%]
+test/test_todos.py::test_delete_todo_not_found FAILED                    [ 77%]
+test/test_users.py::test_return_user PASSED                              [ 83%]
+test/test_users.py::test_change_password_success PASSED                  [ 88%]
+test/test_users.py::test_change_password_invalid_current_password PASSED [ 94%]
+test/test_users.py::test_change_phone_number_success PASSED              [100%]
+
+================================== FAILURES ===================================
+____________________ test_read_one_authenticated_not_found ____________________
+
+    def test_read_one_authenticated_not_found():
+        response = client.get(
+            "/todos/todo/999", headers={"Authorization": "Bearer fake-jwt-token"}
+        )
+        assert response.status_code == 404
+>       assert response.json() == {"detail": "todo not found."}
+E       AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+E         
+E         Differing items:
+E         {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+E         
+E         Full diff:
+E           {
+E         -     'detail': 'todo not found.',
+E         ?                ^
+E         +     'detail': 'Todo not found.',
+E         ?                ^
+E           }
+
+test\test_todos.py:47: AssertionError
+_________________________ test_update_todo_not_found __________________________
+
+test_todo = <models.Todos object at 0x000001A3642B23C0>
+
+    def test_update_todo_not_found(test_todo):
+        request_data = {
+            "title": "Change the title",
+            "description": "change Todo description",
+            "priority": 5,
+            "complete": False,
+        }
+    
+        response = client.put("/todos/todo/999", json=request_data)
+        assert response.status_code == 404
+>       assert response.json() == {"detail": "todo not found."}
+E       AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+E         
+E         Differing items:
+E         {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+E         
+E         Full diff:
+E           {
+E         -     'detail': 'todo not found.',
+E         ?                ^
+E         +     'detail': 'Todo not found.',
+E         ?                ^
+E           }
+
+test\test_todos.py:96: AssertionError
+_________________________ test_delete_todo_not_found __________________________
+
+test_todo = <models.Todos object at 0x000001A3642D45C0>
+
+    def test_delete_todo_not_found(test_todo):
+        response = client.delete("/todos/todo/999")
+        assert response.status_code == 404
+>       assert response.json() == {"detail": "todo not found."}
+E       AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+E         
+E         Differing items:
+E         {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+E         
+E         Full diff:
+E           {
+E         -     'detail': 'todo not found.',
+E         ?                ^
+E         +     'detail': 'Todo not found.',
+E         ?                ^
+E           }
+
+test\test_todos.py:111: AssertionError
+=========================== short test summary info ===========================
+FAILED test/test_todos.py::test_read_one_authenticated_not_found - AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+  
+  Differing items:
+  {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+  
+  Full diff:
+    {
+  -     'detail': 'todo not found.',
+  ?                ^
+  +     'detail': 'Todo not found.',
+  ?                ^
+    }
+FAILED test/test_todos.py::test_update_todo_not_found - AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+  
+  Differing items:
+  {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+  
+  Full diff:
+    {
+  -     'detail': 'todo not found.',
+  ?                ^
+  +     'detail': 'Todo not found.',
+  ?                ^
+    }
+FAILED test/test_todos.py::test_delete_todo_not_found - AssertionError: assert {'detail': 'Todo not found.'} == {'detail': 'todo not found.'}
+  
+  Differing items:
+  {'detail': 'Todo not found.'} != {'detail': 'todo not found.'}
+  
+  Full diff:
+    {
+  -     'detail': 'todo not found.',
+  ?                ^
+  +     'detail': 'Todo not found.',
+  ?                ^
+    }
+======================== 3 failed, 15 passed in 7.08s =========================
