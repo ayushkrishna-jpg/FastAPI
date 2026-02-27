@@ -22,40 +22,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for todo in todos %}
-                {% if todo.complete == False %}
-                <tr class="pointer">
-                    <td>{{loop.index}}</td>
-                    <td>{{todo.title}}</td>
-                    <td>
-                        <button onclick="window.location.href='edit-todo-page/{{todo.id}}'"
-                                type="button" class="btn btn-info">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-                {% else %}
-                <tr class="pointer alert alert-success">
-                    <td>{{loop.index}}</td>
-                    <td class="strike-through-td">{{todo.title}}</td>
-                    <td>
-                        <button onclick="window.location.href='edit-todo-page/{{todo.id}}'"
-                                type="button" class="btn btn-info">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
+                    {% for todo in todos %}
+                    {% if todo.complete == False %}
+                    <tr class="pointer">
+                        <td>{{loop.index}}</td>
+                        <td>{{todo.title}}</td>
+                        <td>
+                            <button onclick="window.location.href='view-todo-page/{{todo.id}}'" type="button"
+                                class="btn btn-secondary">
+                                View
+                            </button>
+                            <button onclick="window.location.href='edit-todo-page/{{todo.id}}'" type="button"
+                                class="btn btn-info">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr class="pointer alert alert-success">
+                        <td>{{loop.index}}</td>
+                        <td class="strike-through-td">{{todo.title}}</td>
+                        <td>
+                            <button onclick="window.location.href='view-todo-page/{{todo.id}}'" type="button"
+                                class="btn btn-secondary">
+                                View
+                            </button>
+                            <button onclick="window.location.href='edit-todo-page/{{todo.id}}'" type="button"
+                                class="btn btn-info">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
                 </tbody>
             </table>
             <a href="add-todo-page" class="btn btn-primary">Add a new todo!</a>
         </div>
     </div>
 </div>
-
-
-
-
-
-
