@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from starlette import status
 from database import SessionLocal
@@ -21,13 +21,13 @@ oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 
 class CreateUserRequest(BaseModel):
-    username: str
-    email: str
-    first_name: str
-    last_name: str
-    password: str
+    username: str = Field(min_length=3, max_length=50)
+    email: str = Field(min_length=5, max_length=100)
+    first_name: str = Field(min_length=1)
+    last_name: str = Field(min_length=1)
+    password: str = Field(min_length=6, max_length=72)
     role: str
-    phone_number: str
+    phone_number: str = Field(min_length=10, max_length=10)
 
 
 class Token(BaseModel):
@@ -98,8 +98,17 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
         )
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
+    # Check if username or email already exists
+    existing_user_name = db.query(Users).filter(Users.username == create_user_request.username).first()
+    if existing_user_name:
+        raise HTTPException(status_code=400, detail="Username already exists")
+    
+    existing_user_email = db.query(Users).filter(Users.email == create_user_request.email).first()
+    if existing_user_email:
+        raise HTTPException(status_code=400, detail="Email already exists")
+
     create_user_model = Users(
         email=create_user_request.email,
         username=create_user_request.username,
