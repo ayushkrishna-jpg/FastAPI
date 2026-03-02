@@ -31,7 +31,7 @@ function showAlert(message, type = 'danger') {
             } else if (wrapper.parentNode) {
                 wrapper.remove();
             }
-        }, 10000);
+        }, 3000);
     } else {
         console.error('alert-container not found in DOM!');
     }
